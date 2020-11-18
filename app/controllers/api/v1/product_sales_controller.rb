@@ -6,7 +6,7 @@ module Api
         data = FetchProductSales.new(start_date: start_date, end_date: end_date, unit: unit).call
         render json: { results: data }, status: :ok
       rescue Exception => e
-        render json: { errors: [ { title: e.class.to_s, code: '400', detail: e.message } ] }, status: :bad_request
+        render json: { errors: { title: e.class.to_s, code: '400', detail: e.message } }, status: :bad_request
       end
 
       private

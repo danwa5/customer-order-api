@@ -8,20 +8,17 @@ module Api
 
         render json: { results: serializer[:data] }, status: :ok
       rescue Exception => e
-        render json: { errors: [ { title: e.class.to_s, code: '400', detail: e.message } ] }, status: :bad_request
+        render json: { errors: { title: e.class.to_s, code: '400', detail: e.message } }, status: :bad_request
       end
 
       # POST /api/v1/orders
       def create
         order = CreateOrder.new(email: customer_email, order_data: order_data).call
+        serializer = OrderSerializer.new(order).serializable_hash
 
-        if order
-          render json: {}, status: :created
-        else
-          render json: {}, status: '400'
-        end
+        render json: { order: serializer[:data] }, status: :created
       rescue Exception => e
-        render json: { errors: [ { title: e.class.to_s, code: '400', detail: e.message } ] }, status: :bad_request
+        render json: { errors: { title: e.class.to_s, code: '400', detail: e.message } }, status: :bad_request
       end
 
       private

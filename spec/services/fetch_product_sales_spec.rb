@@ -30,7 +30,7 @@ RSpec.describe FetchProductSales do
         @order_line2 = create(:order_line, order: order, product: @product2)
       end
 
-      it 'returns th' do
+      example do
         results = described_class.new(start_date: yesterday, end_date: today).call
         expect(results.count).to eq(2)
 
