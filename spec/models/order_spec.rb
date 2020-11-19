@@ -16,7 +16,7 @@ RSpec.describe Order, type: :model do
   end
 
   describe 'before_create' do
-    example do
+    it 'sets the order status' do
       order = build(:order)
       expect(order.status).to be_nil
       order.save!(validate: false)

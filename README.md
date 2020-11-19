@@ -4,12 +4,12 @@ A Rails API with end points to fetch and create orders, and to retrieve a breakd
 
 ## Assumptions
 1. API does not require authentication. Hence, an access token is not required when making a request.
-2. If the quantity of an item is a decimal (e.g. 1.5), then the unit should be based on weight (pound/ounce).
+2. Cross-origin resource sharing (CORS) is not set up since the type of clients to use the API is unknown.
+3. If the quantity of an item is a decimal (e.g. 1.5), then the unit should be based on weight (pound/ounce).
 A whole number quantity can be based on count or weight.
-3. Many database indexes are missing that would increase database performance and enforce data integrity.
-4. The API endpoint that returns all orders for a customer...
-  - Returns order in descending order because
-  most people are most interested in their most recent orders.
+4. Many database indexes are missing that would increase database performance and enforce data integrity.
+5. The API endpoint that returns all orders for a customer...
+  - Returns order in descending order because most people are typically most interested in their most recent orders.
   - May not be best practice for reporting queries to hit the database directly. A data warehouse for production?
 
 ## With more time...
