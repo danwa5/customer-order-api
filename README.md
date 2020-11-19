@@ -75,7 +75,7 @@ Retrieve a breakdown of products sold by quantity per day/week/month
 - `start_date` and `end_date` should be in YYYY-MM-DD format
 - `unit` should be "day" (default), "week", or "month"
 ```shell
-curl 'http://localhost:3000/api/v1/product_sales?start_date=2020-10-01&end_date=2020-12-01&unit=date' \
+curl 'http://localhost:3000/api/v1/product_sales?start_date=2020-10-01&end_date=2020-12-01&unit=day' \
   -X GET \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json'
