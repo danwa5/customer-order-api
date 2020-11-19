@@ -9,5 +9,6 @@ RSpec.describe OrderLine, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:order_id) }
     it { is_expected.to validate_presence_of(:product_id) }
+    it { is_expected.to validate_inclusion_of(:unit).in_array(%w(count pound ounce)) }
   end
 end

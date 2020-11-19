@@ -14,4 +14,13 @@ RSpec.describe Order, type: :model do
   describe 'ORDER_STATUSES' do
     it { expect(described_class::ORDER_STATUSES).to eq(['ready', 'on its way', 'delivered']) }
   end
+
+  describe 'before_create' do
+    example do
+      order = build(:order)
+      expect(order.status).to be_nil
+      order.save!(validate: false)
+      expect(order.status).to eq('ready')
+    end
+  end
 end

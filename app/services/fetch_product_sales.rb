@@ -18,13 +18,13 @@ class FetchProductSales
   def date_field
     case @unit
     when 'day'
-      "DATE(o.order_date) as date_part"
+      "DATE_PART('dow', o.order_date) as date_part"
     when 'week'
       "DATE_PART('week', o.order_date) as date_part"
     when 'month'
       "DATE_PART('month', o.order_date) as date_part"
     else
-      "DATE(o.order_date) as date_part"
+      "DATE_PART('dow', o.order_date) as date_part"
     end
   end
 

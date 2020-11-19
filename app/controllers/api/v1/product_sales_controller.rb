@@ -20,7 +20,7 @@ module Api
       end
 
       def unit
-        params.fetch('unit', 'date')
+        params.fetch('unit', 'day')
       end
     end
   end

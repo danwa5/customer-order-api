@@ -37,16 +37,43 @@ RSpec.describe FetchProductSales do
         aggregate_failures '1st result attributes' do
           expect(results[0]['product_id']).to eq(@product2.id)
           expect(results[0]['product_name']).to eq(@product2.name)
-          expect(results[0]['date_part']).to eq(today)
-          expect(results[0]['total_quantity']).to eq(@order_line2.quantity)
+          expect(results[0]['date_part']).to be_present
+          expect(results[0]['total_quantity']).to eq(sprintf('%.2f', @order_line2.quantity))
         end
 
         aggregate_failures '2nd result attributes' do
           expect(results[1]['product_id']).to eq(@product1.id)
           expect(results[1]['product_name']).to eq(@product1.name)
-          expect(results[1]['date_part']).to eq(today)
-          expect(results[1]['total_quantity']).to eq(@order_line1.quantity)
+          expect(results[1]['date_part']).to be_present
+          expect(results[1]['total_quantity']).to eq(sprintf('%.2f', @order_line1.quantity))
         end
+      end
+    end
+  end
+
+  describe '#date_field' do
+    context 'when unit is "day"' do
+      subject { described_class.new(start_date: yesterday, end_date: today, unit: 'day') }
+      example do
+        expect(subject.send(:date_field)).to eq("DATE_PART('dow', o.order_date) as date_part")
+      end
+    end
+    context 'when unit is "week"' do
+      subject { described_class.new(start_date: yesterday, end_date: today, unit: 'week') }
+      example do
+        expect(subject.send(:date_field)).to eq("DATE_PART('week', o.order_date) as date_part")
+      end
+    end
+    context 'when unit is "month"' do
+      subject { described_class.new(start_date: yesterday, end_date: today, unit: 'month') }
+      example do
+        expect(subject.send(:date_field)).to eq("DATE_PART('month', o.order_date) as date_part")
+      end
+    end
+    context 'when unit is anything else' do
+      subject { described_class.new(start_date: yesterday, end_date: today, unit: [nil, 'foo'].sample) }
+      example do
+        expect(subject.send(:date_field)).to eq("DATE_PART('dow', o.order_date) as date_part")
       end
     end
   end

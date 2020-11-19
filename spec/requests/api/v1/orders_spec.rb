@@ -6,26 +6,41 @@ RSpec.describe 'Orders', type: :request do
   let(:product2) { create(:product) }
 
   describe 'GET /api/v1/orders' do
-    before do
-      customer = create(:customer, email: email)
-      orders = create_list(:order, 2, customer: customer)
+    context 'when request fails' do
+      it 'returns status 400' do
+        expect_any_instance_of(FetchOrders).to receive(:call).and_raise(RuntimeError, 'Error message')
+
+        get api_v1_orders_path, params: { email: email }
+
+        json = JSON.parse(response.body)
+        expect(response).to have_http_status(400)
+        expect(json['errors']['title']).to eq('RuntimeError')
+        expect(json['errors']['detail']).to eq('Error message')
+      end
     end
 
-    it 'returns 200' do
-      expect_any_instance_of(FetchOrders).to receive(:call).once.and_call_original
+    context 'when request succeeds' do
+      before do
+        customer = create(:customer, email: email)
+        orders = create_list(:order, 2, customer: customer)
+      end
 
-      get api_v1_orders_path, params: { email: email }
+      it 'returns status 200' do
+        expect_any_instance_of(FetchOrders).to receive(:call).once.and_call_original
 
-      json = JSON.parse(response.body)
+        get api_v1_orders_path, params: { email: email }
 
-      expect(response).to have_http_status(200)
-      expect(json['results'].count).to eq(2)
+        json = JSON.parse(response.body)
+
+        expect(response).to have_http_status(200)
+        expect(json['results'].count).to eq(2)
+      end
     end
   end
 
   describe 'POST /api/v1/orders' do
     context 'when request fails' do
-      it 'returns 400' do
+      it 'returns status 400' do
         expect_any_instance_of(CreateOrder).to receive(:call).and_raise(RuntimeError, 'Error message')
 
         post api_v1_orders_path, params: { email: email }
@@ -38,14 +53,14 @@ RSpec.describe 'Orders', type: :request do
     end
 
     context 'when request succeeds' do
-      it 'returns 201' do
+      it 'returns status 201' do
         expect_any_instance_of(CreateOrder).to receive(:call).and_call_original
 
         post api_v1_orders_path, params: {
           email: email,
           order: [
-            { product_id: product1.id, qty: 5 },
-            { product_id: product2.id, qty: 10 }
+            { product_id: product1.id, qty: 1.5, unit: 'pound' },
+            { product_id: product2.id, qty: 100, unit: 'count' }
           ]
         }
 
