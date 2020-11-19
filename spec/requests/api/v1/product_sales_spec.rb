@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Product Sales', type: :request do
   let(:start_date) { 1.week.ago.strftime('%Y-%m-%d') }
-  let(:end_date) { Date.today.strftime('%Y-%m-%d') }
+  let(:end_date) { Date.tomorrow.strftime('%Y-%m-%d') }
 
   describe 'GET /api/v1/product_sales' do
     context 'when request fails' do

@@ -12,7 +12,7 @@ RSpec.describe FetchOrders do
 
     context 'when customer has orders' do
       example do
-        order1 = create(:order, customer: customer, order_date: Date.yesterday)
+        order1 = create(:order, customer: customer, order_date: 2.days.ago)
         order2 = create(:order, customer: customer, order_date: Date.today)
 
         expect(subject.call).to eq([order2, order1])
