@@ -23,12 +23,16 @@ module Api
 
       private
 
+      def order_params
+        @order_params ||= params.permit(:email, :order => [:product_id, :qty, :unit]).to_h
+      end
+
       def customer_email
-        params.to_unsafe_h.fetch('email')
+        order_params.fetch('email', nil)
       end
 
       def order_data
-        params.to_unsafe_h.fetch('order', [])
+        order_params.fetch('order', [])
       end
     end
   end

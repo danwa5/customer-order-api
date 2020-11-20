@@ -11,16 +11,20 @@ module Api
 
       private
 
+      def reporting_params
+        @reporting_params ||= params.permit(:start_date, :end_date, :unit).to_h
+      end
+
       def start_date
-        params.fetch('start_date')
+        reporting_params.fetch('start_date', nil)
       end
 
       def end_date
-        params.fetch('end_date')
+        reporting_params.fetch('end_date', nil)
       end
 
       def unit
-        params.fetch('unit', 'day')
+        reporting_params.fetch('unit', nil)
       end
     end
   end
